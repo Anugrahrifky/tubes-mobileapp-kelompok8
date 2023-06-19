@@ -16,6 +16,8 @@ class Profile extends StatelessWidget {
           child: Column(
             children: <Widget>[
               CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://e7.pngegg.com/pngimages/113/90/png-clipart-one-piece-monkey-d-luffy-illustration-monkey-d-luffy-brook-vinsmoke-sanji-goku-chibi-one-piece-food-hand.png"),
                 backgroundColor: Color.fromARGB(246, 5, 48, 165),
                 radius: 70.0,
               ),

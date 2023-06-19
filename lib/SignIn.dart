@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:mobapps/SignUp.dart';
 import 'package:mobapps/Dashboard.dart';
+import 'package:mobapps/Signup_controller.dart';
+import 'package:mobapps/login_controller.dart';
+import 'package:get/get.dart';
+import 'package:mobapps/SignIn.dart';
+import 'package:mobapps/Signup_controller.dart';
+import 'respository/authentication_respository/authentication_repository.dart';
 
 // void main() => runApp(const MaterialApp());
 final _formkey = GlobalKey<FormState>();
 final emailText = TextEditingController();
 final passwordText = TextEditingController();
 
+void main() => runApp(const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SignInPage(),
+    ));
+
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
+    final _formKey = GlobalKey<FormState>();
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -67,6 +80,7 @@ class SignInPage extends StatelessWidget {
                       child: Column(
                         children: <Widget>[
                           TextFormField(
+                            controller: controller.email,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'masukkan email';
@@ -84,7 +98,8 @@ class SignInPage extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: controller.password,
                             keyboardType: TextInputType.visiblePassword,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.key),
@@ -105,10 +120,15 @@ class SignInPage extends StatelessWidget {
                         // Navigator.push(context, MaterialPageRoute(builder: (context){
                         //   return MoodTrackerApp();
                         // }));
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return MyApp();
-                        }));
+                        if (_formKey.currentState!.validate()) {
+                          SignUpController.instance.registerUser(
+                              controller.email.text.trim(),
+                              controller.password.text.trim());
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return MyApp();
+                          }));
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.all(20),

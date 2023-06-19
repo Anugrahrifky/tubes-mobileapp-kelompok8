@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobapps/SignIn.dart';
+import 'package:mobapps/Signup_controller.dart';
 
 void main() => runApp(const MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -8,9 +10,10 @@ void main() => runApp(const MaterialApp(
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SignUpController());
+    final _formKey = GlobalKey<FormState>();
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -80,7 +83,8 @@ class SignUpPage extends StatelessWidget {
                           ]),
                       child: Column(
                         children: <Widget>[
-                          TextField(
+                          TextFormField(
+                            controller: controller.fullName,
                             keyboardType: TextInputType.name,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.person),
@@ -92,7 +96,8 @@ class SignUpPage extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: controller.phoneNo,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.call),
@@ -104,7 +109,8 @@ class SignUpPage extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: controller.email,
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.email),
@@ -116,7 +122,8 @@ class SignUpPage extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          TextField(
+                          TextFormField(
+                            controller: controller.password,
                             keyboardType: TextInputType.visiblePassword,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.key),
@@ -159,10 +166,11 @@ class SignUpPage extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return SignInPage();
-                        }));
+                        if (_formKey.currentState!.validate()) {
+                          SignUpController.instance.registerUser(
+                              controller.email.text.trim(),
+                              controller.password.text.trim());
+                        }
                       },
                       child: const Text(
                         "Already have account? Sign In",
